@@ -1,0 +1,42 @@
+:root {
+  --bg: #fbfaf7; --fg: #1d1b19; --muted: #6b665f; --card: #ffffff; --line: #e6e1d8;
+  --accent: #5b3df5; --accent-fg: #fff; --warn: #b4540a;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #14130f; --fg: #f1ede6; --muted: #a39d92; --card: #1d1b17; --line: #34312a; --accent: #8b75ff; --accent-fg: #14130f; --warn: #f0a15a; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+a { color: var(--accent); }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 16px 64px; }
+header.top { display: flex; align-items: center; justify-content: space-between; padding: 16px; max-width: 960px; margin: 0 auto; gap: 12px; flex-wrap: wrap; }
+header.top .brand { font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--fg); }
+header.top nav { display: flex; gap: 16px; align-items: center; }
+h1 { font-size: 1.9rem; line-height: 1.2; margin: 16px 0 8px; }
+h2 { font-size: 1.2rem; margin: 28px 0 8px; }
+.lead { color: var(--muted); max-width: 60ch; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 12px 0; }
+button, .btn { font: inherit; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 8px; padding: 9px 16px; cursor: pointer; text-decoration: none; display: inline-block; }
+button.ghost, .btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+button:disabled { opacity: .5; cursor: default; }
+label { display: block; font-size: .9rem; color: var(--muted); margin: 10px 0 4px; }
+input[type=text], input[type=email], input[type=password], textarea, select { width: 100%; font: inherit; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+.drop { border: 2px dashed var(--line); border-radius: 12px; padding: 28px 16px; text-align: center; color: var(--muted); }
+.stage { position: relative; width: 100%; background: #000; border-radius: 12px; overflow: hidden; }
+.stage video { width: 100%; display: block; max-height: 70vh; margin: 0 auto; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 10px 0; font-size: .9rem; }
+.controls label { display: inline-flex; gap: 6px; align-items: center; margin: 0; color: var(--fg); }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: .85rem; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+.bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar > div { height: 100%; background: var(--accent); transition: width .2s; }
+.err { color: var(--warn); }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+.vid { text-decoration: none; color: inherit; display: block; }
+.vid img { width: 100%; border-radius: 8px; display: block; }
+.vid small { color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.muted { color: var(--muted); }
+.drill { border-left: 3px solid var(--accent); padding-left: 10px; margin-top: 6px; }
