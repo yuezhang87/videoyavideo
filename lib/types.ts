@@ -50,9 +50,11 @@ export type Feedback = {
   pieceGuess: string | null;
   summary: string;
   strengths: string[];
-  improvements: { title: string; detail: string; drill: string }[];
+  improvements: { title: string; detail: string; drill: string; icon?: string; topic?: string }[];
   practicePlan: string[];
   youtubeQueries: string[];
+  /** curated-video topics (free mode) */
+  topics?: string[];
 };
 
 export type VideoLink = {

@@ -25,6 +25,6 @@ test("flat fingers, dropped wrist and rushing are flagged", () => {
   m.rushDragNote = "speeds up over the clip (gaps shrink 30%) - rushing";
   const titles = coach(m, "Fur Elise").improvements.map((i) => i.title);
   assert.ok(titles.includes("Curve your fingers more"));
-  assert.ok(titles.includes("Keep your wrists level with your hand"));
+  assert.ok(titles.includes("Lift your wrist"));
   assert.ok(coach(m, "Fur Elise").youtubeQueries.some((q) => q.includes("Fur Elise")));
 });

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/config";
 import { coach } from "@/lib/coach";
+import { curatedVideos } from "@/lib/videos";
 import { findVideos } from "@/lib/youtube";
 import type { Feedback, Metrics } from "@/lib/types";
 
@@ -85,7 +86,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "The coach could not produce feedback. Please try again." }, { status: 502 });
   }
 
-  const videos = await findVideos(feedback.youtubeQueries);
+  const videos = process.env.YOUTUBE_API_KEY
+    ? await findVideos(feedback.youtubeQueries)
+    : curatedVideos(feedback.topics ?? [], body.piece);
 
   if (!user) return NextResponse.json({ id: null, feedback, videos, saved: false });
 
