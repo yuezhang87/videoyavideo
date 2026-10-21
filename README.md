@@ -7,17 +7,6 @@ Upload a side-view clip of your piano playing and get:
 3. **YouTube lessons** matched to the problems found.
 4. **Saved history** per user (Supabase).
 
-## Setup
-
-1. `npm install`
-2. Create a Supabase project, run `supabase/migrations/0001_analyses.sql` in the SQL editor.
-3. Copy `.env.example` to `.env.local` and fill it in:
-   - Supabase URL + anon key (free)
-   - `ANTHROPIC_API_KEY` (pay-as-you-go; a few cents per analysis)
-   - `YOUTUBE_API_KEY` (free quota; optional, falls back to YouTube search links)
-4. `npm run dev`, then deploy to Vercel with the same env vars.
-
-`npm test` runs the analysis unit tests.
 
 ## How it works
 
