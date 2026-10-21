@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/config";
 import { SignOutButton } from "@/components/SignOutButton";
 
 export const metadata: Metadata = {
@@ -10,15 +11,16 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const user = await getUser();
   return (
     <html lang="en">
       <body>
         <header className="top">
           <Link href="/" className="brand">🎹 Piano Coach</Link>
           <nav>
-            {data.user ? (
+            {!hasSupabase ? (
+              <span className="muted">Guest mode</span>
+            ) : user ? (
               <>
                 <Link href="/history">History</Link>
                 <SignOutButton />

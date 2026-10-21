@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { FeedbackView } from "@/components/FeedbackView";
 import type { Feedback, Metrics, VideoLink } from "@/lib/types";
 
 export default async function SessionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const user = await getUser();
+  if (!user) redirect("/login");
   const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) redirect("/login");
 
   const { data: row } = await supabase.from("analyses").select("*").eq("id", id).maybeSingle();
   if (!row) notFound();

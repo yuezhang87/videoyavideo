@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/config";
 import { Analyzer } from "@/components/Analyzer";
 
 export default async function Home() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const user = await getUser();
   return (
     <>
       <h1>See your fingers. Play better.</h1>
@@ -11,7 +11,7 @@ export default async function Home() {
         Upload a side-view clip of your piano playing. I’ll track every finger, show you where your hand
         technique can improve, and link lessons that fit.
       </p>
-      <Analyzer signedIn={!!data.user} />
+      <Analyzer signedIn={!!user} guest={!hasSupabase} />
     </>
   );
 }

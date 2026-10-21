@@ -20,3 +20,11 @@ export async function createClient() {
     },
   );
 }
+
+/** Returns the signed-in user, or null (also null when Supabase isn't configured). */
+export async function getUser() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return null;
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  return data.user;
+}

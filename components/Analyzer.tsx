@@ -32,7 +32,7 @@ function capture(video: HTMLVideoElement, frames: TrackFrame[], t: number, width
   });
 }
 
-export function Analyzer({ signedIn }: { signedIn: boolean }) {
+export function Analyzer({ signedIn, guest }: { signedIn: boolean; guest: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [src, setSrc] = useState<string | null>(null);
   const [piece, setPiece] = useState("");
@@ -76,7 +76,7 @@ export function Analyzer({ signedIn }: { signedIn: boolean }) {
         setError("I couldn’t find hands in this clip. Make sure your hands are well lit and fully in frame, then try again.");
         return;
       }
-      if (!signedIn) {
+      if (!signedIn && !guest) {
         setStage("done");
         return;
       }
@@ -145,7 +145,7 @@ export function Analyzer({ signedIn }: { signedIn: boolean }) {
         </>
       )}
 
-      {stage === "done" && !signedIn && (
+      {stage === "done" && !signedIn && !guest && (
         <div className="card">
           Finger tracking is ready — press play above. <Link href="/login">Sign in</Link> to get coaching feedback, YouTube lessons and a saved history.
         </div>
@@ -156,7 +156,7 @@ export function Analyzer({ signedIn }: { signedIn: boolean }) {
           {result.saved && result.id && (
             <p className="muted">Saved to your <Link href={`/session/${result.id}`}>history</Link>.</p>
           )}
-          {!result.saved && <p className="err">Feedback couldn’t be saved to your history (is the database set up?).</p>}
+          {!result.saved && !guest && <p className="err">Feedback couldn’t be saved to your history (is the database set up?).</p>}
           <FeedbackView result={result} metrics={metrics ?? undefined} />
         </>
       )}

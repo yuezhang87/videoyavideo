@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/config";
+import { coach } from "@/lib/coach";
 import { findVideos } from "@/lib/youtube";
 import type { Feedback, Metrics } from "@/lib/types";
 
@@ -34,12 +36,8 @@ function extractJson(text: string): Feedback {
 }
 
 export async function POST(req: Request) {
-  const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return NextResponse.json({ error: "Please sign in first." }, { status: 401 });
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ error: "Server is missing ANTHROPIC_API_KEY." }, { status: 500 });
-  }
+  const user = await getUser();
+  if (hasSupabase && !user) return NextResponse.json({ error: "Please sign in first." }, { status: 401 });
 
   const body = (await req.json()) as {
     metrics: Metrics;
@@ -57,9 +55,12 @@ export async function POST(req: Request) {
       : [];
   });
 
-  const anthropic = new Anthropic();
   let feedback: Feedback;
-  try {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    // Free mode: rule-based coaching from the measurements.
+    feedback = coach(body.metrics, body.piece);
+  } else try {
+    const anthropic = new Anthropic();
     const msg = await anthropic.messages.create({
       model: process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
       max_tokens: 2000,
@@ -86,6 +87,9 @@ export async function POST(req: Request) {
 
   const videos = await findVideos(feedback.youtubeQueries);
 
+  if (!user) return NextResponse.json({ id: null, feedback, videos, saved: false });
+
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("analyses")
     .insert({
